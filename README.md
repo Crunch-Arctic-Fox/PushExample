@@ -12,7 +12,7 @@
 1. Firebase 웹 들어가서 Project 생성한다
 
 2. build & manifest(meta & service) 파일 수정해서 Firebase sdk를 설정해준다
-     - bom을 사용하려면 minSDK가 26이상이었던것 같으니.. 잘 안되면 체크해보기
+     - messaging-ktx를 사용하려면 minSDK가 26이상이었던것 같으니.. 잘 안되면 체크해보기
      
 3. FirebaseMessagingService를 상속받는ExampleMessagingService class를 만들어 준다
 
