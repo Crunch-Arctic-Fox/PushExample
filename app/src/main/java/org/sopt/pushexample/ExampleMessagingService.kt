@@ -7,8 +7,11 @@ import android.content.Context
 import android.content.Intent
 import android.media.RingtoneManager
 import android.os.Build
+import android.util.Log
 import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 
@@ -34,10 +37,10 @@ class ExampleMessagingService : FirebaseMessagingService() {
              * val title = data["title"] 이렇게 사용할 수 있음
              *
              * data: {
-                title: randomTitle as string,
-                body: reminder.ogTitle as string,
-                image: reminder.ogImage as string,
-                url: reminder.url as string,
+            title: randomTitle as string,
+            body: reminder.ogTitle as string,
+            image: reminder.ogImage as string,
+            url: reminder.url as string,
             }
              * */
         }
@@ -49,7 +52,7 @@ class ExampleMessagingService : FirebaseMessagingService() {
         }
     }
 
-    private fun sendNotification(title : String, text : String) {
+    private fun sendNotification(title: String, text: String) {
 
         // 푸시알림 클릭 했을 때 이동할 Activity 지정
         val intent = Intent(this, MainActivity::class.java)
@@ -65,11 +68,11 @@ class ExampleMessagingService : FirebaseMessagingService() {
             .setAutoCancel(true)
             .setSound(defaultSoundUri)
             .setContentIntent(pendingIntent)
-            .setContent(getRemoteView(title,text))
-            // 커스텀 토스트를 사용하지 않고, 안드로이드 디폴트 푸시알림을 사용하려면
-            // 위 setContent() 한 줄을 지우고 setContentTitle(), setContentText()를 추가하면됨
-            //.setContentTitle(title)
-            //.setContentText(text)
+            .setContent(getRemoteView(title, text))
+        // 커스텀 토스트를 사용하지 않고, 안드로이드 디폴트 푸시알림을 사용하려면
+        // 위 setContent() 한 줄을 지우고 setContentTitle(), setContentText()를 추가하면됨
+        //.setContentTitle(title)
+        //.setContentText(text)
 
 
         val notificationManager =
@@ -77,7 +80,8 @@ class ExampleMessagingService : FirebaseMessagingService() {
 
         /** Oreo Version 이하일때 처리 하는 코드 */
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val notificationChannel = NotificationChannel(channelID, channelName, NotificationManager.IMPORTANCE_HIGH)
+            val notificationChannel =
+                NotificationChannel(channelID, channelName, NotificationManager.IMPORTANCE_HIGH)
             notificationManager.createNotificationChannel(notificationChannel)
         }
 
@@ -85,7 +89,7 @@ class ExampleMessagingService : FirebaseMessagingService() {
     }
 
     // 푸시알림 커스텀 하는 메소드
-    private fun getRemoteView(title : String, text : String) : RemoteViews{
+    private fun getRemoteView(title: String, text: String): RemoteViews {
         val remoteView = RemoteViews("com.sopt.androidsharing", R.layout.push_notification)
         remoteView.setTextViewText(R.id.tv_title, title)
         remoteView.setTextViewText(R.id.tv_description, text)
@@ -95,6 +99,19 @@ class ExampleMessagingService : FirebaseMessagingService() {
     }
 
     companion object {
+        fun getDeviceToken() {
+            FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+                if (!task.isSuccessful) {
+                    Log.d("TokenTest", "Fetching FCM registration token failed", task.exception)
+                    return@OnCompleteListener
+                }
+
+                // Get new FCM registration token
+                val token = task.result
+                Log.d("TokenTest", token)
+            })
+        }
+
         private const val TAG = "ExampleMessagingService"
     }
 }
