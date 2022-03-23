@@ -27,7 +27,7 @@
 
 ### 💾 세미나 자료
 
-[FCM Seminar pdf 초안](https://github.com/Crunch-Arctic-Fox/PushExample/files/8133392/FCM.Draft1.pdf)
+[FCM Seminar pdf_수정(22.03.23)](https://github.com/Crunch-Arctic-Fox/PushExample/files/8334023/FCM.Ver2.pdf)
 ------------------
 
 ![image](https://user-images.githubusercontent.com/59546818/155548347-cde3ede7-84d8-407d-8d4d-cd5f3b159a97.png)
